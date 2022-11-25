@@ -64,7 +64,7 @@ namespace Analyzer
 
             var relevantReferences = walker.Usings.Where(str => str.StartsWith(assemblyNamespace));
 
-            var classified = ReferenceClassification.Classify(relevantReferences, nodeNamespace);
+            var classified = ReferenceClassifier.Classify(relevantReferences, nodeNamespace);
 
 
             var coherencePenalties = relevantReferences

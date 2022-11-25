@@ -26,7 +26,7 @@ namespace Analyzer.Test
         {
             var node = "Customer.Details.Address";
 
-            var result = ReferenceClassification.Classify(new string[] {"System.Text.Json"}, node).References;
+            var result = ReferenceClassifier.Classify(new string[] {"System.Text.Json"}, node).References;
 
             result.Should().BeEmpty();
         }
@@ -36,9 +36,9 @@ namespace Analyzer.Test
         {
             var node = "Customer.Details.Address";
             
-            var result = ReferenceClassification.Classify(_references, node).References.Single(r => r.FullyQualifiedClassName == customerOrder);
+            var result = ReferenceClassifier.Classify(_references, node).References.Single(r => r.FullyQualifiedClassName == customerOrder);
 
-            result.Direction.Should().Be(ReferenceClassification.Direction.StraightUp);
+            result.Direction.Should().Be(ReferenceClassifier.Direction.StraightUp);
             result.Distance.Should().Be(1);
         }
 
@@ -48,9 +48,9 @@ namespace Analyzer.Test
             var node = customerOrder;
             var reference = "Customer.Details.Address";
 
-            var result = ReferenceClassification.Classify(new string[] { reference }, node).References.Single();
+            var result = ReferenceClassifier.Classify(new string[] { reference }, node).References.Single();
 
-            result.Direction.Should().Be(ReferenceClassification.Direction.Down);
+            result.Direction.Should().Be(ReferenceClassifier.Direction.Down);
             result.Distance.Should().Be(1);
         }
 
@@ -59,9 +59,9 @@ namespace Analyzer.Test
         {
             var node = "Customer.Details.Address";
 
-            var result = ReferenceClassification.Classify(_references, node).References.Single(r => r.FullyQualifiedClassName == customerDetailsPhoneNumber);
+            var result = ReferenceClassifier.Classify(_references, node).References.Single(r => r.FullyQualifiedClassName == customerDetailsPhoneNumber);
 
-            result.Direction.Should().Be(ReferenceClassification.Direction.Side);
+            result.Direction.Should().Be(ReferenceClassifier.Direction.Side);
             result.Distance.Should().Be(0);
         }
 
@@ -69,8 +69,8 @@ namespace Analyzer.Test
         public void Classify_Diagonal()
         {
             var node = "Customer.Details.Address";
-            var result = ReferenceClassification.Classify(_references, node).References.Single(r => r.FullyQualifiedClassName == customerInfoPreferences);
-            result.Direction.Should().Be(ReferenceClassification.Direction.Diagonal);
+            var result = ReferenceClassifier.Classify(_references, node).References.Single(r => r.FullyQualifiedClassName == customerInfoPreferences);
+            result.Direction.Should().Be(ReferenceClassifier.Direction.Diagonal);
             result.Distance.Should().Be(2);
         }
     }

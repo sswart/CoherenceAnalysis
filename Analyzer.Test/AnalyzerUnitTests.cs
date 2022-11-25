@@ -1,17 +1,17 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Threading.Tasks;
+using Xunit;
 using VerifyCS = Analyzer.Test.CSharpCodeFixVerifier<
     Analyzer.AnalyzerAnalyzer,
     Analyzer.AnalyzerCodeFixProvider>;
 
 namespace Analyzer.Test
 {
-    [TestClass]
     public class AnalyzerUnitTest
     {
         //No diagnostics expected to show up
-        [TestMethod]
+        [Fact]
         public async Task Diagnostic_Not_Triggered()
         {
             var test = @"
@@ -37,7 +37,7 @@ namespace MockAnalyzer.Test.Registration.Step1
             await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
-        [TestMethod]
+        [Fact]
         public async Task Diagnostic_Triggered()
         {
             var test = @"

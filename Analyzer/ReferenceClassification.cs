@@ -4,15 +4,15 @@ using System.Linq;
 
 namespace Analyzer
 {
-    public class ReferenceClassification
+    public class ReferenceClassifier
     {
-        public static ReferenceMetadata Classify(IEnumerable<string> relevantReferences, string nodeNamespace)
+        public static ReferenceMetadata Classify(IEnumerable<string> referencedClasses, string nodeNamespace)
         {
-            var references = relevantReferences.Select(r => Classify(r, nodeNamespace)).Where(r => r != null).Cast<UsingClassification>();
+            var references = referencedClasses.Select(r => Classify(r, nodeNamespace)).Where(r => r != null).Cast<ReferenceClassification>();
             return new ReferenceMetadata(nodeNamespace, references);
         }
 
-        private static UsingClassification? Classify(string referenceClassName, string sourceClassName)
+        private static ReferenceClassification? Classify(string referenceClassName, string sourceClassName)
         {
             var match = ExternalCohesionCalculator.FindBiggestMatch(referenceClassName, sourceClassName);
             if (string.IsNullOrEmpty(match))
@@ -25,7 +25,7 @@ namespace Analyzer
             var distance = CountSteps(prunedReference) + CountSteps(prunedSource);
             var direction = GetDirection(prunedSource, prunedReference);
 
-            return new UsingClassification(referenceClassName, direction, distance);
+            return new ReferenceClassification(referenceClassName, direction, distance);
         }
 
         private static Direction GetDirection(string prunedSource, string prunedReference)
@@ -53,8 +53,8 @@ namespace Analyzer
             return prunedSource.Count(c => c == '.');
         }
 
-        public record ReferenceMetadata(string SourceNamespace, IEnumerable<UsingClassification> References);
-        public record UsingClassification(string FullyQualifiedClassName, Direction Direction, int Distance);
+        public record ReferenceMetadata(string SourceNamespace, IEnumerable<ReferenceClassification> References);
+        public record ReferenceClassification(string FullyQualifiedClassName, Direction Direction, int Distance);
         public enum Direction
         {
             StraightUp,
