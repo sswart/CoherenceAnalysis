@@ -7,7 +7,7 @@ using System.Text;
 namespace Analyzer.Test
 {
     [TestClass]
-    public class CoherenceCalculatorTests
+    public class CohesionCalculatorTests
     {
         [TestMethod]
         public void FindBiggestMatch()
@@ -15,7 +15,7 @@ namespace Analyzer.Test
             var one = "Test.Namespace.One";
             var two = "Test.Namespace.Two";
 
-            var match = AnalyzerAnalyzer.CoherenceCalculator.FindBiggestMatch(one, two);
+            var match = AnalyzerAnalyzer.ExternalCohesionCalculator.FindBiggestMatch(one, two);
             match.Should().Be("Test.Namespace.");
         }
 
@@ -25,7 +25,7 @@ namespace Analyzer.Test
             var one = "Test.Namespace.One";
             var two = "Test.Namespace.One";
 
-            var match = AnalyzerAnalyzer.CoherenceCalculator.FindBiggestMatch(one, two);
+            var match = AnalyzerAnalyzer.ExternalCohesionCalculator.FindBiggestMatch(one, two);
             match.Should().Be("Test.Namespace.One");
         }
 
@@ -35,27 +35,27 @@ namespace Analyzer.Test
             var one = "Test.Namespace.One";
             var two = "Some.Namespace.One";
 
-            var match = AnalyzerAnalyzer.CoherenceCalculator.FindBiggestMatch(one, two);
+            var match = AnalyzerAnalyzer.ExternalCohesionCalculator.FindBiggestMatch(one, two);
             match.Should().Be("");
         }
 
         [TestMethod]
-        public void FindCoherencePenalty()
+        public void FindCohesionPenalty()
         {
             var one = "Test.Namespace.One";
             var two = "Test.Namespace.Two";
 
-            var match = AnalyzerAnalyzer.CoherenceCalculator.GetCoherencePenalty(one, two);
+            var match = AnalyzerAnalyzer.ExternalCohesionCalculator.GetCohesionPenalty(one, two);
             match.Should().Be(2);
         }
 
         [TestMethod]
-        public void FindCoherencePenalty_Far()
+        public void FindCohesionPenalty_Far()
         {
             var one = "Test.Namespace.One";
             var two = "Some.Namespace.One";
 
-            var match = AnalyzerAnalyzer.CoherenceCalculator.GetCoherencePenalty(one, two);
+            var match = AnalyzerAnalyzer.ExternalCohesionCalculator.GetCohesionPenalty(one, two);
             match.Should().Be(6);
         }
     }

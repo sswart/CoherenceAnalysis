@@ -6,8 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Text;
-using System.Threading;
 
 namespace Analyzer
 {
@@ -32,44 +30,31 @@ namespace Analyzer
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
 
-            // TODO: Consider registering other actions that act on syntax instead of or in addition to symbols
-            // See https://github.com/dotnet/roslyn/blob/main/docs/analyzers/Analyzer%20Actions%20Semantics.md for more information
-            //context.RegisterSymbolAction(AnalyzeSymbol, SymbolKind.NamedType);
-
-            //context.RegisterCompilationAction(AnalyzeCompilation);
-
             context.RegisterSyntaxNodeAction<SyntaxKind>(AnalyzeSyntaxNode, SyntaxKind.NamespaceDeclaration);
+            context.RegisterSyntaxNodeAction<SyntaxKind>(AnalyzeClassNode, SyntaxKind.ClassDeclaration);
+        }
+
+        private void AnalyzeClassNode(SyntaxNodeAnalysisContext context)
+        {
+            var theClass = (ClassDeclarationSyntax)context.Node;
+            var children = theClass.DescendantNodes();
+
+            var a = DateTime.FromBinary(1);
+            var b = DateTime.Now;
         }
 
         private void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
-            var score = GetCoherenceReport((NamespaceDeclarationSyntax)context.Node);
-            if (score.IncoherentReferenceCount > 0)
+            var score = GetCohesionReport((NamespaceDeclarationSyntax)context.Node);
+            if (score.IncohesiveReferenceCount > 0)
             {
-                var diagnostic = Diagnostic.Create(Rule, context.Node.GetLocation(), context.ContainingSymbol.Name, score.IncoherenceScore, score.IncoherentReferenceCount);
+                var diagnostic = Diagnostic.Create(Rule, context.Node.GetLocation(), context.ContainingSymbol.Name, score.IncohesionScore, score.IncohesiveReferenceCount);
 
                 context.ReportDiagnostic(diagnostic);
             }
         }
 
-        //private void AnalyzeCompilation(CompilationAnalysisContext context)
-        //{
-        //    var trees = context.Compilation.SyntaxTrees;
-        //    foreach(var tree in trees)
-        //    {
-        //        var root = tree.GetCompilationUnitRoot();
-        //        GetCoherenceReport(root);
-        //        var walker = new Walker();
-        //        walker.Visit(root);
-
-        //        var relevantReferences = walker.Usings.Where(str => str.StartsWith(walker.Namespace));
-        //        var totalPenalty = relevantReferences
-        //            .Select(r => CoherenceCalculator.GetCoherencePenalty(walker.Namespace, r))
-        //            .Sum();
-        //    }
-        //}
-
-        private CoherenceReport GetCoherenceReport(NamespaceDeclarationSyntax node)
+        private CohesionReport GetCohesionReport(NamespaceDeclarationSyntax node)
         {
             var walker = new Walker();
             walker.Visit(node.Parent);
@@ -79,27 +64,27 @@ namespace Analyzer
 
             var relevantReferences = walker.Usings.Where(str => str.StartsWith(assemblyNamespace));
             var coherencePenalties = relevantReferences
-                .Select(r => CoherenceCalculator.GetCoherencePenalty(nodeNamespace, r));
+                .Select(r => ExternalCohesionCalculator.GetCohesionPenalty(nodeNamespace, r));
 
             var totalPenalty = coherencePenalties.Sum();
 
             var incoherentReferenceCount = coherencePenalties.Count(penalty => penalty > 0);
 
-            return new CoherenceReport
+            return new CohesionReport
             {
-                IncoherenceScore = totalPenalty,
-                IncoherentReferenceCount = incoherentReferenceCount
+                IncohesionScore = totalPenalty,
+                IncohesiveReferenceCount = incoherentReferenceCount
             };
         }
 
-        public class CoherenceReport
+        public class CohesionReport
         {
-            public int IncoherenceScore { get; set; }
-            public int IncoherentReferenceCount { get; set; }
+            public int IncohesionScore { get; set; }
+            public int IncohesiveReferenceCount { get; set; }
         }
-        public class CoherenceCalculator
+        public class ExternalCohesionCalculator
         {
-            public static int GetCoherencePenalty(string sourceNamespace, string usingNamespace)
+            public static int GetCohesionPenalty(string sourceNamespace, string usingNamespace)
             {
                 var biggestMatch = FindBiggestMatch(sourceNamespace, usingNamespace);
 
@@ -137,5 +122,25 @@ namespace Analyzer
 
             public readonly List<string> Usings = new List<string>();
         }
+        
+        public class ReferenceWalker : CSharpSyntaxWalker
+        {
+            public override void VisitMemberAccessExpression(MemberAccessExpressionSyntax node)
+            {
+                //if (node is SimpleMemberAccessExpressionSyntax expr)
+                if (node.IsKind(SyntaxKind.SimpleMemberAccessExpression))
+                {
+                    // check the left side of it
+                }
+                base.VisitMemberAccessExpression(node);
+            }
+
+            public override void VisitParameter(ParameterSyntax node)
+            {
+                // if it is defined in this assembly
+                base.VisitParameter(node);
+            }
+        }
+
     }
 }
