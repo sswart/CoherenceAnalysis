@@ -63,6 +63,10 @@ namespace Analyzer
             var assemblyNamespace = ((QualifiedNameSyntax)node.Name).Left.ToString();
 
             var relevantReferences = walker.Usings.Where(str => str.StartsWith(assemblyNamespace));
+
+            var classified = ReferenceClassification.Classify(relevantReferences, nodeNamespace);
+
+
             var coherencePenalties = relevantReferences
                 .Select(r => ExternalCohesionCalculator.GetCohesionPenalty(nodeNamespace, r));
 
@@ -77,6 +81,7 @@ namespace Analyzer
             };
         }
 
+        
         public class CohesionReport
         {
             public int IncohesionScore { get; set; }

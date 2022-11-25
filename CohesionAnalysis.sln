@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analyzer.Test", "Analyzer.T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analyzer.Vsix", "Analyzer.Vsix\Analyzer.Vsix.csproj", "{6A8C55FD-9D75-4C44-8AD9-9731DB535C9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App", "App\App.csproj", "{4D318264-6D57-4604-B39F-12509601F806}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App", "App\App.csproj", "{4D318264-6D57-4604-B39F-12509601F806}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Examples", "Examples\Examples.csproj", "{7A46E629-7DFA-433A-A7D2-99EA430D3849}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{4D318264-6D57-4604-B39F-12509601F806}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D318264-6D57-4604-B39F-12509601F806}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D318264-6D57-4604-B39F-12509601F806}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A46E629-7DFA-433A-A7D2-99EA430D3849}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A46E629-7DFA-433A-A7D2-99EA430D3849}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A46E629-7DFA-433A-A7D2-99EA430D3849}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A46E629-7DFA-433A-A7D2-99EA430D3849}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

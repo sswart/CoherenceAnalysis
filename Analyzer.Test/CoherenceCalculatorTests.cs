@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Analyzer.Test
 {
-    [TestClass]
     public class CohesionCalculatorTests
     {
-        [TestMethod]
+        [Fact]
         public void FindBiggestMatch()
         {
             var one = "Test.Namespace.One";
@@ -16,7 +16,7 @@ namespace Analyzer.Test
             match.Should().Be("Test.Namespace.");
         }
 
-        [TestMethod]
+        [Fact]
         public void FindBiggestMatch_Same()
         {
             var one = "Test.Namespace.One";
@@ -26,7 +26,7 @@ namespace Analyzer.Test
             match.Should().Be("Test.Namespace.One");
         }
 
-        [TestMethod]
+        [Fact]
         public void FindBiggestMatch_NoMatch()
         {
             var one = "Test.Namespace.One";
@@ -36,7 +36,7 @@ namespace Analyzer.Test
             match.Should().Be("");
         }
 
-        [TestMethod]
+        [Fact]
         public void FindCohesionPenalty()
         {
             var one = "Test.Namespace.One";
@@ -46,7 +46,7 @@ namespace Analyzer.Test
             match.Should().Be(2);
         }
 
-        [TestMethod]
+        [Fact]
         public void FindCohesionPenalty_Far()
         {
             var one = "Test.Namespace.One";
