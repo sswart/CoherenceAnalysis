@@ -70,7 +70,7 @@ namespace Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type name &apos;{0}&apos; has an incoherence score: {1} with {2} incoherent references.
+        ///   Looks up a localized string similar to Type name &apos;{0}&apos; has an infcoherence score: {1} with {2} incoherent references.
         /// </summary>
         internal static string AnalyzerMessageFormat {
             get {
