@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using static Analyzer.AnalyzerAnalyzer;
 
 namespace Analyzer
 {
@@ -24,35 +22,30 @@ namespace Analyzer
             var prunedSource = sourceClassName.Substring(match.Length);
             var prunedReference = referenceClassName.Substring(match.Length);
 
-            Direction direction;
-            int distance;
+            var distance = CountSteps(prunedReference) + CountSteps(prunedSource);
+            var direction = GetDirection(prunedSource, prunedReference);
+
+            return new UsingClassification(referenceClassName, direction, distance);
+        }
+
+        private static Direction GetDirection(string prunedSource, string prunedReference)
+        {
             if (CountSteps(prunedReference) == 0 && CountSteps(prunedSource) != 0)
             {
-                direction = Direction.StraightUp;
-                distance = CountSteps(prunedSource);
-            }
-            else if (CountSteps(prunedReference) == 0 && CountSteps(prunedSource) == 0)
-            {
-                direction = Direction.Side;
-                distance = 0;
+                return Direction.StraightUp;
             }
             else if (CountSteps(prunedReference) != 0 && CountSteps(prunedSource) == 0)
             {
-                direction = Direction.Down;
-                distance = CountSteps(prunedReference);
+                return Direction.Down;
             }
             else if (CountSteps(prunedReference) != 0 && CountSteps(prunedSource) != 0)
             {
-                direction = Direction.DiagonalUp;
-                distance = CountSteps(prunedReference) + CountSteps(prunedSource);
+                return Direction.Diagonal;
             }
             else
             {
-                direction = Direction.Side;
-                distance = 0;
+                return Direction.Side;
             }
-
-            return new UsingClassification(referenceClassName, direction, distance);
         }
 
         private static int CountSteps(string prunedSource)
@@ -67,7 +60,7 @@ namespace Analyzer
             StraightUp,
             Down,
             Side,
-            DiagonalUp
+            Diagonal
         }
     }
 }

@@ -70,7 +70,7 @@ namespace Analyzer.Test
         {
             var node = "Customer.Details.Address";
             var result = ReferenceClassification.Classify(_references, node).References.Single(r => r.FullyQualifiedClassName == customerInfoPreferences);
-            result.Direction.Should().Be(ReferenceClassification.Direction.DiagonalUp);
+            result.Direction.Should().Be(ReferenceClassification.Direction.Diagonal);
             result.Distance.Should().Be(2);
         }
     }

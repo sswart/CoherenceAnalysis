@@ -12,7 +12,7 @@ namespace Analyzer.Test
             var one = "Test.Namespace.One";
             var two = "Test.Namespace.Two";
 
-            var match = AnalyzerAnalyzer.ExternalCohesionCalculator.FindBiggestMatch(one, two);
+            var match = ExternalCohesionCalculator.FindBiggestMatch(one, two);
             match.Should().Be("Test.Namespace.");
         }
 
@@ -22,7 +22,7 @@ namespace Analyzer.Test
             var one = "Test.Namespace.One";
             var two = "Test.Namespace.One";
 
-            var match = AnalyzerAnalyzer.ExternalCohesionCalculator.FindBiggestMatch(one, two);
+            var match = ExternalCohesionCalculator.FindBiggestMatch(one, two);
             match.Should().Be("Test.Namespace.One");
         }
 
@@ -32,7 +32,7 @@ namespace Analyzer.Test
             var one = "Test.Namespace.One";
             var two = "Some.Namespace.One";
 
-            var match = AnalyzerAnalyzer.ExternalCohesionCalculator.FindBiggestMatch(one, two);
+            var match = ExternalCohesionCalculator.FindBiggestMatch(one, two);
             match.Should().Be("");
         }
 
@@ -42,7 +42,7 @@ namespace Analyzer.Test
             var one = "Test.Namespace.One";
             var two = "Test.Namespace.Two";
 
-            var match = AnalyzerAnalyzer.ExternalCohesionCalculator.GetCohesionPenalty(one, two);
+            var match = ExternalCohesionCalculator.GetCohesionPenalty(one, two);
             match.Should().Be(2);
         }
 
@@ -52,7 +52,7 @@ namespace Analyzer.Test
             var one = "Test.Namespace.One";
             var two = "Some.Namespace.One";
 
-            var match = AnalyzerAnalyzer.ExternalCohesionCalculator.GetCohesionPenalty(one, two);
+            var match = ExternalCohesionCalculator.GetCohesionPenalty(one, two);
             match.Should().Be(6);
         }
     }
